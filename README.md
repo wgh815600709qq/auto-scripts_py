@@ -3,4 +3,4 @@
 
 > batchDelete.py  ***批量本地删除git分支***
 
-> build-metro.py  *** 地铁线操作 ***
+> build-metro.py  ***地铁线操作***
