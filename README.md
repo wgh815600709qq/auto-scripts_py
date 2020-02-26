@@ -6,3 +6,5 @@
 > build-metro.py  ***地铁线操作***
 
 > git-auto.py  ***git提交、合并***
+
+> iconfont-cli.py  ***iconfont官网集成地铁线***
