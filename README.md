@@ -8,3 +8,7 @@
 > git-auto.py  ***git提交、合并***
 
 > iconfont-cli.py  ***iconfont官网集成地铁线***
+
+> gitLogBetweenDate ***查询日期直接的git操作日志，并输入csv文件***
+
+> gitLogBetweenTag ***查询git的tag之间的操作日志, 并输入csv文件***
