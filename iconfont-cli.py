@@ -8,10 +8,10 @@
 
 
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By # 可能无相关引用了
+from selenium.webdriver.support.expected_conditions import presence_of_element_located # 可能无相关引用了
 import time
-from selenium.webdriver.support.expected_conditions import presence_of_element_located
 from shutil import copyfile
 import os
 import subprocess
