@@ -21,7 +21,7 @@
 
 ## 库引入
 import time
-from config.config import Config
+from config.index import Config
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains # 鼠标悬停
@@ -65,7 +65,7 @@ def login(wait):
             driver.find_element_by_xpath(export_excel_xPath).click()
             break
 ### 解析xlsx
-def parseXLSX():
+
 ### 删除本地的xlsx
 def deleteDownloadXlsx():
     
