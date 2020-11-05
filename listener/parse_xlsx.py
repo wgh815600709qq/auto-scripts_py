@@ -2,12 +2,18 @@
 # 解析xlsx
 import openpyxl
 from config.index import Config
+import os
+def removeOldFile(_path):
+    if os.path.exists(_path):
+        os.remove(_path)
+    else:
+        print('file is not exist')
 # import numpy as np
 def parseXlsx():
     parseUrl = Config.__downloadPath__
     workbook = openpyxl.load_workbook(parseUrl)    #找到需要xlsx文件的位置
     booksheet = workbook.active                 #获取当前活跃的sheet,默认是第一个sheet
-
+    removeOldFile(parseUrl) # 先删除文件
     # 如果想获取别的sheet页采取下面这种方式，先获取所有sheet页名，在通过指定那一页。
     # sheets = workbook.get_sheet_names()  # 从名称获取sheet
     # booksheet = workbook.get_sheet_by_name(sheets[0])
@@ -41,28 +47,6 @@ def parseXlsx():
             data.append(row_data)
             pass
     # print (cell_data_1, cell_data_2, cell_data_3, cell_data_4)
-    print(data)
+    print('解析结果', data)
     return data
 
-
-# 判断变量类型的函数
-def typeof(variate):
-    type=None
-    if isinstance(variate,int):
-        type = "int"
-    elif isinstance(variate,str):
-        type = "str"
-    elif isinstance(variate,float):
-        type = "float"
-    elif isinstance(variate,list):
-        type = "list"
-    elif isinstance(variate,tuple):
-        type = "tuple"
-    elif isinstance(variate,dict):
-        type = "dict"
-    elif isinstance(variate,set):
-        type = "set"
-    return type
-
-
-parseXlsx()

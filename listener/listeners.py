@@ -23,7 +23,7 @@ def printTime(inc,data):
 
 # 默认参数60s
 def addListener(inc=60, xlsxData=[]):
-    # enter四个参数分别为：间隔事件、优先级（用于同时间到达的两个事件同时执行时定序）、被调用触发的函数，
+    # enter四个参数分别为：间隔事件、优先级（用于同时间到达的两个事件同时执行时定序）、被调用触发的函数、函数参数。
     # 给该触发函数的参数（tuple形式）
     schedule.enter(0, 0, printTime, (inc,xlsxData))
     schedule.run()

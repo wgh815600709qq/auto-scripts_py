@@ -6,12 +6,22 @@ from listeners import addListener
 import mail
 import time
 from selenium.webdriver.support.ui import WebDriverWait
+import asyncio
+
+
+# def callbackFun(future):
+    # result = future.result()
+
+def main(wait, driver):
+    login(wait, driver, parse)
+
+def parse():
+    xlsxData = parseXlsx()
+    addListener(60, xlsxData)
 
 
 # 登录跳转流程
 with webdriver.Chrome() as driver:
     wait = WebDriverWait(driver, 10)
-    login(wait, driver)
-    time.sleep(5)
-    xlsxData = parseXlsx()
-    addListener(60, xlsxData)
+    main(wait, driver)
+
