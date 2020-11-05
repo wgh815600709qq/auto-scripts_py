@@ -42,6 +42,7 @@ def parseXlsx():
             pass
     # print (cell_data_1, cell_data_2, cell_data_3, cell_data_4)
     print(data)
+    return data
 
 
 # 判断变量类型的函数

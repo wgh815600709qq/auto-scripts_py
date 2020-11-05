@@ -38,7 +38,7 @@ __config__ = Config()
 ## Part One 检测文件内容
 ### driver爬腾讯文档流程：登录腾讯文档-> 导出->解析->根据需求通知
 ### 腾讯文档登录 qq方式(账号/密码) 并下载对应的excel
-def login(wait):
+def login(wait, driver):
     driver.get(__config__.__tencentDocumentLoginUrl__)
     time.sleep(3) # 3s静止
     # Iframe嵌套需要控制调整
@@ -64,23 +64,8 @@ def login(wait):
             export_excel_xPath='//li[contains(text(), ".xlsx")]'
             driver.find_element_by_xpath(export_excel_xPath).click()
             break
-### 解析xlsx
-
-### 删除本地的xlsx
-def deleteDownloadXlsx():
-    
-## Part Two 定时任务检查文件
-
-
-
-
-## 主线程函数
-def main():
-    print('process main start')
-    print('process main end')
-
 
 # 登录跳转流程
-with webdriver.Chrome() as driver:
-    wait = WebDriverWait(driver, 10)
-    login(wait)
+# with webdriver.Chrome() as driver:
+#     wait = WebDriverWait(driver, 10)
+#     login(wait)

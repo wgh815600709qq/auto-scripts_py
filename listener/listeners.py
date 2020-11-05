@@ -10,29 +10,22 @@ from datetime import datetime
 import urllib3
 import re  # 正则表达式，用于匹配字符
 from bs4 import BeautifulSoup  # 导入BeautifulSoup 模块 
-mockData = [
-    [
-    '测试商品1', 
-    'https://github.com/wgh815600709qq?tab=repositories',
-    'https://avatars3.githubusercontent.com/u/17962624?s=460&u=9954c9b33250e12247150bc6fe0fea88877c053e&v=4', 
-    '815600709@qq.com'
-    ]
-]
+from mail import sendMail
 # 初始化sched模块的 scheduler 类
 # 第一个参数是一个可以返回时间戳的函数，第二个参数可以在定时未到达之前阻塞。
 schedule = sched.scheduler(time.time, time.sleep)
 
 # 被周期性调度触发的函数
-def printTime(inc):
+def printTime(inc,data):
     print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    listener(mockData)
+    listener(data)
     # schedule.enter(inc, 0, printTime, (inc,)) # 内部重复调用
 
 # 默认参数60s
-def main(inc=60):
+def addListener(inc=60, xlsxData=[]):
     # enter四个参数分别为：间隔事件、优先级（用于同时间到达的两个事件同时执行时定序）、被调用触发的函数，
     # 给该触发函数的参数（tuple形式）
-    schedule.enter(0, 0, printTime, (inc,))
+    schedule.enter(0, 0, printTime, (inc,xlsxData))
     schedule.run()
 
 def listener(data):
@@ -62,7 +55,7 @@ def listener(data):
                 break
             else:
                 print('Something Wrong', img_url)
+                sendMail(img_url)
         else:
             print(response.status)
 # 10s 输出一次
-main(60)
