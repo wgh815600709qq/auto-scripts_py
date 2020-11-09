@@ -6,6 +6,7 @@ import os
 def removeOldFile(_path):
     if os.path.exists(_path):
         os.remove(_path)
+        print('旧文件删除成功')
     else:
         print('file is not exist')
 # import numpy as np

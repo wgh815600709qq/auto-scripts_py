@@ -28,8 +28,7 @@ from selenium.webdriver.common.action_chains import ActionChains # 鼠标悬停
 from selenium.webdriver.support import expected_conditions # 尝试
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
-# import requests
-# from requests.exceptions import RequestException
+import os
 # from bs4 import BeautifulSoup 解析html的
 
 __config__ = Config()
@@ -39,6 +38,7 @@ __config__ = Config()
 ### driver爬腾讯文档流程：登录腾讯文档-> 导出->解析->根据需求通知
 ### 腾讯文档登录 qq方式(账号/密码) 并下载对应的excel
 def login(wait, driver, callback):
+    print('开始登陆')
     driver.get(__config__.__tencentDocumentLoginUrl__)
     time.sleep(3) # 3s静止
     # Iframe嵌套需要控制调整
@@ -53,6 +53,9 @@ def login(wait, driver, callback):
     time.sleep(3) # 3s后直接访问文档地址
     driver.get(__config__.__onlineDocumentUrl__)
     time.sleep(10) # 10s后开始导出，因腾讯文档需要同步
+    download(driver, callback)
+
+def download(driver, callback):
     # 鼠标点击‘更多’图标，此时才有导出的dom结构
     driver.find_element_by_class_name('titlebar-icon-more').click()
     time.sleep(1)
@@ -65,6 +68,15 @@ def login(wait, driver, callback):
             driver.find_element_by_xpath(export_excel_xPath).click()
             break
     time.sleep(3)
+    # close会导致服务异常
+    # Todo找到driver占用的端口并杀死
+    # try:
+    #     print('尝试关闭driver')
+    #     driver.close()
+    #     os.system('taskkill /f /im chromedriver.exe') # 关闭进程
+    # except Exception as e:
+    #     print(e)
+    print('excel导出成功, 关闭driver')
     callback()
 
 # 登录跳转流程

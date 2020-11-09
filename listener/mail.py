@@ -17,14 +17,14 @@ def sendMail(msg):
     message['From'] = Header("帅的一匹", 'utf-8')   # 发送者
     message['To'] =  Header("测试", 'utf-8')        # 接收者
     
-    subject = 'Python SMTP 邮件测试'
+    subject = '图片异常检测报告'
     message['Subject'] = Header(subject, 'utf-8')
     print('message', message)
     try:
         smtpObj = smtplib.SMTP_SSL(smtpserver, smtpport)
         print('create service')
         smtpObj.login(sender, Config.__qqMailVerify__)
-        print('login')
+        print('login success')
         smtpObj.sendmail(sender, receivers, message.as_string())
         print("邮件发送成功")
     except (smtplib.SMTPException) as e:

@@ -11,51 +11,50 @@ import urllib3
 import re  # 正则表达式，用于匹配字符
 from bs4 import BeautifulSoup  # 导入BeautifulSoup 模块 
 from mail import sendMail
+from config.index import Config
 # 初始化sched模块的 scheduler 类
 # 第一个参数是一个可以返回时间戳的函数，第二个参数可以在定时未到达之前阻塞。
 schedule = sched.scheduler(time.time, time.sleep)
 
-# 被周期性调度触发的函数
-def printTime(inc,data):
-    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    listener(data)
-    # schedule.enter(inc, 0, printTime, (inc,)) # 内部重复调用
 
-# 默认参数60s
-def addListener(inc=60, xlsxData=[]):
-    # enter四个参数分别为：间隔事件、优先级（用于同时间到达的两个事件同时执行时定序）、被调用触发的函数、函数参数。
-    # 给该触发函数的参数（tuple形式）
-    schedule.enter(0, 0, printTime, (inc,xlsxData))
-    schedule.run()
-
-def listener(data):
+# 根据excel内容去爬对应的信息，校验并发送邮件
+def checkWebSite(data):
+    wrong_imgList = []
+    http = urllib3.PoolManager(num_pools=100,maxsize=10,block=True,retries=10)
+    wrong_imgList.append('腾讯文档在线维护地址:' +  Config.__onlineDocumentUrl__ + ',发现的异常如下：')
     for row in data:
         goods_name = row[0]
         web_url = row[1]
         img_url = row[2]
         email = row[3]
         print(goods_name, web_url, img_url, email)
-        http = urllib3.PoolManager()
         response = http.request('GET', url=web_url)
         # page = urllib2.urlopen(web_url)
         if response.status == 200:
             pageContent = response.data
-            print('pageContent', pageContent)
+            # print('pageContent', pageContent)
             soup =  BeautifulSoup(pageContent)
             img_list = soup.find_all('img')
             flag = bool(False)
-            print('img_list', img_list)
+            # print('img_list', img_list)
             for img in img_list:
                 img_nowUrl = img.attrs['src']
                 if (img_nowUrl == img_url): # 图片找到了
                     flag = bool(True)
-                    print('find the image', img_nowUrl)
+                    print('这个图片正常', img_nowUrl)
             if flag==bool(True):
-                print('Nothing Special')
-                break
+                continue
             else:
-                print('Something Wrong', img_url)
-                sendMail(img_url)
+                print('图片地址异常', img_url)
+                wrong_imgList.append('→商品:['+goods_name+']图片地址异常;')               
         else:
             print(response.status)
+    # 汇总发送
+    if len(wrong_imgList) > 0:
+        print('图片有异常,正在发邮件')
+        result = "\n".join(wrong_imgList)
+        sendMail(result)
+    else:
+        print('所有图片都正常, 不发邮件')
+    print('连接池数量:', len(http.pools))
 # 10s 输出一次
